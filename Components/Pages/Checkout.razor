@@ -43,11 +43,13 @@
         var orderToSave = new Order
         {
             OrderDate = DateTime.Now,
-            OrderItems = Order.OrderItems.Select(item => new OrderItem
-            {
-                BookId = item.BookId,
-                Quantity = item.Quantity
-            }).ToList()
+            OrderItems = Order.OrderItems
+                .GroupBy(item => item.BookId)
+                .Select(group => new OrderItem
+                {
+                    BookId = group.Key,
+                    Quantity = group.Sum(item => item.Quantity)
+                }).ToList()
         };
 
         context.Orders.Add(orderToSave);

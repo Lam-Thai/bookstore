@@ -15,7 +15,18 @@ public class OrderState
 
     public void AddItem(OrderItem item) // Add book to cart
     {
-        Order.OrderItems.Add(item);
+        var existingItem = Order.OrderItems
+            .FirstOrDefault(i => i.BookId == item.BookId);
+
+        if (existingItem is not null)
+        {
+            existingItem.Quantity += item.Quantity;
+        }
+        else
+        {
+            Order.OrderItems.Add(item);
+        }
+
         OnChange?.Invoke();
     }
 
