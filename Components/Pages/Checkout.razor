@@ -57,7 +57,7 @@
 
         OrderState.ResetOrder();
 
-        NavigationManager.NavigateTo("/myorders");
+        NavigationManager.NavigateTo("/myorders", forceLoad: true);
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
