@@ -13,6 +13,15 @@ public class BookstoreDb(DbContextOptions<BookstoreDb> options) : DbContext(opti
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Order>()
-            .OwnsMany(e => e.OrderItems);
+            .OwnsMany(e => e.OrderItems, orderItems =>
+            {
+                orderItems.WithOwner().HasForeignKey("OrderId");
+                orderItems.HasKey("OrderId", nameof(OrderItem.BookId));
+
+                orderItems.HasOne(item => item.Book)
+                    .WithMany()
+                    .HasForeignKey(item => item.BookId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
     }
 }

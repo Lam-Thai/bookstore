@@ -35,10 +35,25 @@
 
     private async Task PlaceOrder()
     {
-        Order.OrderDate = DateTime.Now;
+        if (!Order.OrderItems.Any())
+        {
+            return;
+        }
 
-        context.Orders.Attach(Order);
+        var orderToSave = new Order
+        {
+            OrderDate = DateTime.Now,
+            OrderItems = Order.OrderItems.Select(item => new OrderItem
+            {
+                BookId = item.BookId,
+                Quantity = item.Quantity
+            }).ToList()
+        };
+
+        context.Orders.Add(orderToSave);
         await context.SaveChangesAsync();
+
+        OrderState.ResetOrder();
 
         NavigationManager.NavigateTo("/");
     }

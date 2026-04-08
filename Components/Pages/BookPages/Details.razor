@@ -77,6 +77,6 @@
 
     private void AddToCart(Book book)
     {
-        OrderState.AddItem(new OrderItem { Book = book, Quantity = 1 });
+        OrderState.AddItem(new OrderItem { BookId = book.Id, Book = book, Quantity = 1 });
     }
 }
