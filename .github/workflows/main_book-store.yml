@@ -27,19 +27,18 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o ./publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
 
     steps:
@@ -47,13 +46,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_AAEC38DE830B47C28F4338B483486287 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BCD744A522B14904AE5E86EA585CFBFE }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_32BA60CA57C1452CA225E4327811D7D2 }}
+          path: ./.net-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -61,5 +54,6 @@ jobs:
         with:
           app-name: 'book-store'
           slot-name: 'Production'
-          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AAEC38DE830B47C28F4338B483486287 }}
+          package: ./.net-app
           
