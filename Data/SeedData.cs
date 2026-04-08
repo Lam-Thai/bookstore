@@ -15,6 +15,8 @@ public class SeedData
             throw new NullReferenceException("Null BookShopDbContext");
         }
 
+        context.Database.EnsureCreated();
+
         if (context.Books.Any())
         {
             return; // db already seeded

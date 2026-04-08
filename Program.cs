@@ -14,11 +14,19 @@ var connectionString = builder.Configuration.GetConnectionString("BOOKSTORE_DB")
     ?? throw new InvalidOperationException("Connection string 'BOOKSTORE_DB' not found");
 
 builder.Services.AddDbContextFactory<BookstoreDb>(options =>
+{
+    if (connectionString.TrimStart().StartsWith("Data Source=", StringComparison.OrdinalIgnoreCase))
+    {
+        options.UseSqlite(connectionString);
+        return;
+    }
+
     options.UseSqlServer(connectionString, sqlServerOptions =>
         sqlServerOptions.EnableRetryOnFailure(
             maxRetryCount: 10,
             maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null)));
+            errorNumbersToAdd: null));
+});
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 
