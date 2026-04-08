@@ -286,6 +286,14 @@ h1:focus {
     backdrop-filter: blur(12px);
 }
 
+.offcanvas.offcanvas-end {
+    width: min(420px, calc(100vw - 1rem));
+}
+
+.offcanvas .offcanvas-body {
+    display: block;
+}
+
 .cart-trigger {
     display: inline-flex;
     align-items: center;
@@ -305,6 +313,16 @@ h1:focus {
     box-shadow: 0 14px 22px rgba(16, 34, 59, 0.14);
 }
 
+.cart-trigger.is-empty {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.cart-trigger.is-empty:hover {
+    transform: none;
+    box-shadow: 0 10px 18px rgba(16, 34, 59, 0.08);
+}
+
 .cart-item {
     border-radius: 16px;
     border: 1px solid var(--border);
@@ -315,6 +333,30 @@ h1:focus {
     background: transparent;
     border: none;
     width: 2.2rem;
+}
+
+.cart-actions {
+    margin-top: 0.7rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(16, 34, 59, 0.12);
+}
+
+.btn-cart-checkout {
+    width: 100%;
+    max-width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 0.8rem 1rem;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #ff8a4c, var(--accent));
+    box-shadow: 0 12px 22px rgba(255, 125, 65, 0.28);
+}
+
+.btn-cart-checkout:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
 }
 
 .summary-row {
