@@ -6,78 +6,80 @@
 
 <PageTitle>Edit</PageTitle>
 
-<h1>Edit</h1>
+<section class="section-enter">
+    <h1 class="mb-3">Edit book</h1>
 
-<h2>Book</h2>
-<hr />
-@if (Book is null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div class="row">
-        <div class="col-md-4">
+    @if (Book is null)
+    {
+        <div class="glass-panel simple-panel">
+            <p class="mb-0"><em>Loading...</em></p>
+        </div>
+    }
+    else
+    {
+        <div class="glass-panel simple-panel">
             <EditForm method="post" Model="Book" OnValidSubmit="UpdateBook" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert"/>
+                <ValidationSummary role="alert" />
                 <input type="hidden" name="Book.Id" value="@Book.Id" />
-                <div class="mb-3">
-                <span class="text-danger">*</span>
-                    <label for="title" class="form-label">Title:</label>
-                    <InputText id="title" @bind-Value="Book.Title" class="form-control" aria-required="true"/>
-                    <ValidationMessage For="() => Book.Title" class="text-danger" />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <span class="text-danger">*</span>
+                        <label for="title" class="form-label">Title:</label>
+                        <InputText id="title" @bind-Value="Book.Title" class="form-control" aria-required="true" />
+                        <ValidationMessage For="() => Book.Title" class="text-danger" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="coverimageurl" class="form-label">CoverImageUrl:</label>
+                        <InputText id="coverimageurl" @bind-Value="Book.CoverImageUrl" class="form-control" />
+                        <ValidationMessage For="() => Book.CoverImageUrl" class="text-danger" />
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-danger">*</span>
+                        <label for="author" class="form-label">Author:</label>
+                        <InputText id="author" @bind-Value="Book.Author" class="form-control" aria-required="true" />
+                        <ValidationMessage For="() => Book.Author" class="text-danger" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="genre" class="form-label">Genre:</label>
+                        <InputText id="genre" @bind-Value="Book.Genre" class="form-control" />
+                        <ValidationMessage For="() => Book.Genre" class="text-danger" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="publisher" class="form-label">Publisher:</label>
+                        <InputText id="publisher" @bind-Value="Book.Publisher" class="form-control" />
+                        <ValidationMessage For="() => Book.Publisher" class="text-danger" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="publicationyear" class="form-label">PublicationYear:</label>
+                        <InputNumber id="publicationyear" @bind-Value="Book.PublicationYear" class="form-control" />
+                        <ValidationMessage For="() => Book.PublicationYear" class="text-danger" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="language" class="form-label">Language:</label>
+                        <InputText id="language" @bind-Value="Book.Language" class="form-control" />
+                        <ValidationMessage For="() => Book.Language" class="text-danger" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="pagecount" class="form-label">PageCount:</label>
+                        <InputNumber id="pagecount" @bind-Value="Book.PageCount" class="form-control" />
+                        <ValidationMessage For="() => Book.PageCount" class="text-danger" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="price" class="form-label">Price:</label>
+                        <InputNumber id="price" @bind-Value="Book.Price" class="form-control" />
+                        <ValidationMessage For="() => Book.Price" class="text-danger" />
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="coverimageurl" class="form-label">CoverImageUrl:</label>
-                    <InputText id="coverimageurl" @bind-Value="Book.CoverImageUrl" class="form-control" />
-                    <ValidationMessage For="() => Book.CoverImageUrl" class="text-danger" />
+
+                <div class="d-flex gap-3 align-items-center mt-4">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="/">Back to list</a>
                 </div>
-                <div class="mb-3">
-                <span class="text-danger">*</span>
-                    <label for="author" class="form-label">Author:</label>
-                    <InputText id="author" @bind-Value="Book.Author" class="form-control" aria-required="true"/>
-                    <ValidationMessage For="() => Book.Author" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="genre" class="form-label">Genre:</label>
-                    <InputText id="genre" @bind-Value="Book.Genre" class="form-control" />
-                    <ValidationMessage For="() => Book.Genre" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="publisher" class="form-label">Publisher:</label>
-                    <InputText id="publisher" @bind-Value="Book.Publisher" class="form-control" />
-                    <ValidationMessage For="() => Book.Publisher" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="publicationyear" class="form-label">PublicationYear:</label>
-                    <InputNumber id="publicationyear" @bind-Value="Book.PublicationYear" class="form-control" />
-                    <ValidationMessage For="() => Book.PublicationYear" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="language" class="form-label">Language:</label>
-                    <InputText id="language" @bind-Value="Book.Language" class="form-control" />
-                    <ValidationMessage For="() => Book.Language" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="pagecount" class="form-label">PageCount:</label>
-                    <InputNumber id="pagecount" @bind-Value="Book.PageCount" class="form-control" />
-                    <ValidationMessage For="() => Book.PageCount" class="text-danger" />
-                </div>
-                <div class="mb-3">
-                    <label for="price" class="form-label">Price:</label>
-                    <InputNumber id="price" @bind-Value="Book.Price" class="form-control" />
-                    <ValidationMessage For="() => Book.Price" class="text-danger" />
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>
-    </div>
-}
-
-<div>
-    <a href="/">Back to List</a>
-</div>
+    }
+</section>
 
 @code {
     [SupplyParameterFromQuery]

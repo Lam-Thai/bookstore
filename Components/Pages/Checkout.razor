@@ -9,20 +9,28 @@
 
 <PageTitle>Bookstore - Checkout</PageTitle>
 
-<h1>Bookstore - Checkout</h1>
+<section class="simple-panel glass-panel section-enter">
+    <h1 class="mb-3">Checkout</h1>
 
-@if (Order.OrderItems.Any())
-{
-    <dl>
-        @foreach(var item in Order.OrderItems)
-        {
-            <dt>@item.Book.Title (@item.Quantity)</dt>
-            <dd>$@item.GetTotal()</dd>
-        }
-    </dl>
-    <p>Total: $@Order.GetTotal()</p>
-    <button class="btn btn-warning" @onclick="PlaceOrder">Place your order</button>
-}
+    @if (Order.OrderItems.Any())
+    {
+        <div class="mb-3">
+            @foreach (var item in Order.OrderItems)
+            {
+                <div class="summary-row">
+                    <span>@item.Book.Title (@item.Quantity)</span>
+                    <strong>$@item.GetTotal()</strong>
+                </div>
+            }
+        </div>
+        <p class="fs-5 fw-semibold mb-4">Total: $@Order.GetTotal()</p>
+        <button class="btn btn-warning" @onclick="PlaceOrder">Place your order</button>
+    }
+    else
+    {
+        <p class="text-secondary mb-0">Your cart is currently empty.</p>
+    }
+</section>
 
 @code {
     private BookstoreDb context { get; set; }

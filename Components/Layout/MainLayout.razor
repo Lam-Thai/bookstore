@@ -1,15 +1,18 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <NavBar />
+    <header class="layout-header section-enter">
+        <NavBar />
+    </header>
 
-    <main>
+    <main class="layout-main section-enter">
         @Body
     </main>
 
-    <footer>
-        <div class="bg-dark p-4 mt-5">
-            <p class="text-center text-white">&copy; 2026 Lam Thai</p>
+    <footer class="layout-footer section-enter">
+        <div class="glass-panel footer-shell p-4 mt-4">
+            <p class="text-center mb-1 fw-semibold">Bookstore</p>
+            <p class="text-center mb-0 text-secondary">&copy; 2026 Lam Thai. Curated stories, delivered beautifully.</p>
         </div>
     </footer>
 </div>

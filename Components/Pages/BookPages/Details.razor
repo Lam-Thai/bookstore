@@ -8,24 +8,27 @@
 
 <PageTitle>Bookstore - Details - @(book != null ? book.Title : "Loading...")</PageTitle>
 
-<h1>@(book != null ? book.Title : "Loading...")</h1>
-
-<div class="row">
-    <div class="col-md-8">
-        @if (book is null) 
-        {
-            <p>Loading...</p>
-        }
-        else
-        {
-            <div class="row">
-                <div class="col-sm-4">
+<section class="section-enter">
+    @if (book is null)
+    {
+        <div class="glass-panel simple-panel">
+            <p class="mb-0">Loading...</p>
+        </div>
+    }
+    else
+    {
+        <h1 class="mb-3">@book.Title</h1>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="glass-panel simple-panel h-100">
                     <img src="@book.CoverImageUrl" alt="@book.Title"
-                        class="img-fluid w-100 object-fit-cover" />
+                         class="img-fluid w-100 object-fit-cover rounded-4" />
                 </div>
+            </div>
 
-                <div class="col-sm-8 position-relative">
-                    <dl class="row">
+            <div class="col-md-8">
+                <div class="glass-panel simple-panel h-100 d-flex flex-column">
+                    <dl class="row mb-0">
                         <dt class="col-sm-4">Title</dt>
                         <dd class="col-sm-8">@book.Title</dd>
                         <dt class="col-sm-4">Author</dt>
@@ -41,22 +44,20 @@
                         <dt class="col-sm-4">PageCount</dt>
                         <dd class="col-sm-8">@book.PageCount</dd>
                         <dt class="col-sm-4">Price</dt>
-                        <dd class="col-sm-8">@book.Price</dd>
+                        <dd class="col-sm-8 fw-semibold">$@book.Price</dd>
                     </dl>
-                    <div>
-                        <a href="@($"/books/edit?id={book.Id}")">Edit</a> |
-                        <a href="@($"/")">Back to List</a>
-                    </div>
-
-                    <div class="position-absolute bottom-0">
-                        <button class="btn btn-warning"
-                            @onclick="() => AddToCart(book)">Purchase</button>
+                    <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                        <div class="d-flex gap-3">
+                            <a href="@($"/books/edit?id={book.Id}")">Edit</a>
+                            <a href="/">Back to list</a>
+                        </div>
+                        <button class="btn btn-warning" @onclick="() => AddToCart(book)">Purchase</button>
                     </div>
                 </div>
             </div>
-        }
-    </div>
-</div>
+        </div>
+    }
+</section>
 
 @code {
     private Book? book;

@@ -22,12 +22,33 @@
 .page {
     display: flex;
     flex-direction: column;
-    width: 80%;
-    margin: 0 auto;
+    width: min(1180px, calc(100% - 2rem));
+    margin: 1.1rem auto 1.5rem;
     min-height: 100vh;
 }
 
-main {
+.layout-main {
     flex: 1;
-    padding: 1rem;
+    padding: 0.7rem 0.2rem 1rem;
+}
+
+.layout-header {
+    position: sticky;
+    top: 0.75rem;
+    z-index: 200;
+}
+
+.footer-shell {
+    border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    .page {
+        width: calc(100% - 1rem);
+        margin-top: 0.7rem;
+    }
+
+    .layout-header {
+        top: 0.25rem;
+    }
 }
