@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Bookstore.Models;
+using System.Data;
 
 namespace Bookstore.Data;
 
@@ -16,6 +17,7 @@ public class SeedData
         }
 
         context.Database.EnsureCreated();
+        EnsureOrderCancellationColumns(context);
 
         if (context.Books.Any())
         {
@@ -145,5 +147,46 @@ public class SeedData
             });
 
         context.SaveChanges();
+    }
+
+    private static void EnsureOrderCancellationColumns(BookstoreDb context)
+    {
+        if (!context.Database.IsSqlite())
+        {
+            return;
+        }
+
+        var existingColumns = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var connection = context.Database.GetDbConnection();
+
+        if (connection.State != ConnectionState.Open)
+        {
+            connection.Open();
+        }
+
+        using (var command = connection.CreateCommand())
+        {
+            command.CommandText = "PRAGMA table_info('Orders');";
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                existingColumns.Add(reader.GetString(1));
+            }
+        }
+
+        if (!existingColumns.Contains("IsCanceled"))
+        {
+            context.Database.ExecuteSqlRaw("ALTER TABLE Orders ADD COLUMN IsCanceled INTEGER NOT NULL DEFAULT 0;");
+        }
+
+        if (!existingColumns.Contains("CancelReason"))
+        {
+            context.Database.ExecuteSqlRaw("ALTER TABLE Orders ADD COLUMN CancelReason TEXT NULL;");
+        }
+
+        if (!existingColumns.Contains("CanceledAt"))
+        {
+            context.Database.ExecuteSqlRaw("ALTER TABLE Orders ADD COLUMN CanceledAt TEXT NOT NULL DEFAULT '0001-01-01T00:00:00';");
+        }
     }
 }

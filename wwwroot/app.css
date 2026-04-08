@@ -328,6 +328,29 @@ h1:focus {
     border-bottom: none;
 }
 
+.cancel-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 11, 24, 0.52);
+    backdrop-filter: blur(3px);
+    z-index: 1050;
+}
+
+.cancel-modal-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 1060;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.cancel-modal-card {
+    width: min(100%, 460px);
+    padding: 1.2rem;
+    animation: section-enter 220ms ease both;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

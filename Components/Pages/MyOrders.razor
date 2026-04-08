@@ -26,7 +26,22 @@
         @foreach (var order in orders)
         {
             <article class="glass-panel simple-panel mb-3 section-enter">
-                <h3 class="h4 mb-3">@order.OrderDate.ToString("MMMM dd, yyyy")</h3>
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                    <h3 class="h4 mb-0">@order.OrderDate.ToString("MMMM dd, yyyy")</h3>
+                    @if (order.IsCanceled)
+                    {
+                        <span class="badge text-bg-danger px-3 py-2">Canceled</span>
+                    }
+                    else
+                    {
+                        <button class="btn btn-danger"
+                                type="button"
+                                @onclick="() => OpenCancelModal(order)">
+                            Cancel order
+                        </button>
+                    }
+                </div>
+
                 @foreach (var item in order.OrderItems)
                 {
                     <div class="summary-row">
@@ -35,15 +50,67 @@
                     </div>
                 }
                 <p class="mt-3 mb-0 fw-bold">Total (@order.OrderItems.Sum(i => i.Quantity)): $@order.GetTotal()</p>
+
+                @if (order.IsCanceled)
+                {
+                    <p class="mt-2 mb-0 text-danger-emphasis fw-semibold">
+                        Canceled on @order.CanceledAt.ToString("MMMM dd, yyyy")
+                    </p>
+                    <p class="mb-0 text-secondary">
+                        Reason: @order.CancelReason
+                    </p>
+                }
             </article>
         }
     }
 </section>
 
+@if (showCancelModal)
+{
+    <div class="cancel-modal-backdrop" @onclick="CloseCancelModal"></div>
+    <div class="cancel-modal-wrapper" role="dialog" aria-modal="true" aria-labelledby="cancelOrderTitle">
+        <div class="glass-panel cancel-modal-card">
+            <h4 id="cancelOrderTitle" class="mb-2">Cancel this order?</h4>
+            <p class="text-secondary mb-3">Please select a reason before canceling your order.</p>
+
+            <label for="cancelReason" class="form-label fw-semibold">Cancellation reason</label>
+            <select id="cancelReason" class="form-select" @bind="cancelReason">
+                <option value="">Select a reason</option>
+                @foreach (var reason in cancelReasons)
+                {
+                    <option value="@reason">@reason</option>
+                }
+            </select>
+
+            @if (!string.IsNullOrWhiteSpace(cancelReasonError))
+            {
+                <p class="text-danger mt-2 mb-0">@cancelReasonError</p>
+            }
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-secondary" @onclick="CloseCancelModal">Keep order</button>
+                <button type="button" class="btn btn-danger" @onclick="ConfirmCancelOrder">Confirm cancel</button>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
     private BookstoreDb context = default!;
     private List<Order> orders = new();
     private bool isLoading = true;
+    private bool showCancelModal;
+    private int selectedOrderId;
+    private string cancelReason = string.Empty;
+    private string cancelReasonError = string.Empty;
+    private readonly string[] cancelReasons =
+    [
+        "Ordered by mistake",
+        "Found a better price",
+        "Shipping is too slow",
+        "Need to change payment method",
+        "Other"
+    ];
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,6 +124,57 @@
             .ToListAsync();
 
         isLoading = false;
+    }
+
+    private void OpenCancelModal(Order order)
+    {
+        selectedOrderId = order.Id;
+        cancelReason = string.Empty;
+        cancelReasonError = string.Empty;
+        showCancelModal = true;
+    }
+
+    private void CloseCancelModal()
+    {
+        showCancelModal = false;
+        selectedOrderId = 0;
+        cancelReason = string.Empty;
+        cancelReasonError = string.Empty;
+    }
+
+    private async Task ConfirmCancelOrder()
+    {
+        if (string.IsNullOrWhiteSpace(cancelReason))
+        {
+            cancelReasonError = "Please choose a cancellation reason.";
+            return;
+        }
+
+        using var updateContext = DbFactory.CreateDbContext();
+        var orderToCancel = await updateContext.Orders
+            .FirstOrDefaultAsync(o => o.Id == selectedOrderId);
+
+        if (orderToCancel is null || orderToCancel.IsCanceled)
+        {
+            CloseCancelModal();
+            return;
+        }
+
+        orderToCancel.IsCanceled = true;
+        orderToCancel.CancelReason = cancelReason;
+        orderToCancel.CanceledAt = DateTime.Now;
+
+        await updateContext.SaveChangesAsync();
+
+        var localOrder = orders.FirstOrDefault(o => o.Id == selectedOrderId);
+        if (localOrder is not null)
+        {
+            localOrder.IsCanceled = true;
+            localOrder.CancelReason = cancelReason;
+            localOrder.CanceledAt = orderToCancel.CanceledAt;
+        }
+
+        CloseCancelModal();
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
