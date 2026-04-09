@@ -8,15 +8,33 @@ retryButton.addEventListener("click", retry);
 const resumeButton = document.getElementById("components-resume-button");
 resumeButton.addEventListener("click", resume);
 
+const reconnectStateClass = {
+    show: "components-reconnect-show",
+    retrying: "components-reconnect-retrying",
+    failed: "components-reconnect-failed",
+    paused: "components-reconnect-paused",
+    "resume-failed": "components-reconnect-resume-failed"
+};
+
 function handleReconnectStateChanged(event) {
-    if (event.detail.state === "show") {
+    const state = event.detail.state;
+
+    if (state === "show") {
+        reconnectModal.className = reconnectStateClass.show;
         reconnectModal.showModal();
-    } else if (event.detail.state === "hide") {
-        reconnectModal.close();
-    } else if (event.detail.state === "failed") {
+    } else if (state === "hide") {
+        reconnectModal.className = "";
+        if (reconnectModal.open) {
+            reconnectModal.close();
+        }
+        document.removeEventListener("visibilitychange", retryWhenDocumentBecomesVisible);
+    } else if (state === "failed") {
+        reconnectModal.className = reconnectStateClass.failed;
         document.addEventListener("visibilitychange", retryWhenDocumentBecomesVisible);
-    } else if (event.detail.state === "rejected") {
+    } else if (state === "rejected") {
         location.reload();
+    } else {
+        reconnectModal.className = reconnectStateClass[state] ?? "";
     }
 }
 

@@ -18,7 +18,7 @@
     else
     {
         <div class="glass-panel simple-panel">
-            <EditForm method="post" Model="Book" OnValidSubmit="UpdateBook" FormName="edit" Enhance>
+            <EditForm method="post" Model="Book" OnValidSubmit="UpdateBook" FormName="edit">
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert" />
                 <input type="hidden" name="Book.Id" value="@Book.Id" />
