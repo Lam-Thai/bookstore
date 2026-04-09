@@ -39,9 +39,9 @@
             </dl>
 
             <EditForm method="post" Model="book" OnValidSubmit="DeleteBook" FormName="delete" Enhance>
-                <div class="d-flex gap-3 align-items-center">
+                <div class="d-flex gap-2 align-items-center flex-wrap">
                     <button type="submit" class="btn btn-danger" disabled="@(book is null)">Delete</button>
-                    <a href="/">Back to list</a>
+                    <a href="/" class="btn btn-outline-modern">Back to list</a>
                 </div>
             </EditForm>
         }

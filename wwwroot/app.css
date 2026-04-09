@@ -110,12 +110,28 @@ h1:focus {
     box-shadow: 0 12px 22px rgba(255, 125, 65, 0.3);
 }
 
+.btn-outline-modern {
+    color: var(--ink);
+    border: 1px solid rgba(16, 34, 59, 0.2);
+    border-radius: 999px;
+    padding: 0.62rem 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 18px rgba(16, 34, 59, 0.1);
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
 .btn-danger {
     color: #fff;
     border: none;
     border-radius: 999px;
+    padding: 0.62rem 1.2rem;
+    font-weight: 600;
     background: linear-gradient(135deg, #ef4444, #dc2626);
     box-shadow: 0 12px 22px rgba(220, 38, 38, 0.3);
+    transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
 .btn-modern:hover,
@@ -125,9 +141,31 @@ h1:focus {
     filter: brightness(1.03);
 }
 
+.btn-danger:hover,
+.btn-outline-modern:hover {
+    transform: translateY(-2px);
+}
+
+.btn-danger:hover {
+    filter: brightness(1.03);
+}
+
+.btn-outline-modern:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 20px rgba(16, 34, 59, 0.12);
+    color: var(--ink);
+}
+
+.btn-outline-modern:visited,
+.btn-outline-modern:active {
+    color: var(--ink);
+}
+
 .btn-modern:focus,
 .btn-primary:focus,
 .btn-warning:focus,
+.btn-danger:focus,
+.btn-outline-modern:focus,
 .form-control:focus,
 .form-select:focus {
     box-shadow: 0 0 0 0.2rem var(--ring);

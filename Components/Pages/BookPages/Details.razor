@@ -46,10 +46,11 @@
                         <dt class="col-sm-4">Price</dt>
                         <dd class="col-sm-8 fw-semibold">$@book.Price</dd>
                     </dl>
-                    <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
-                        <div class="d-flex gap-3">
-                            <a href="@($"/books/edit?id={book.Id}")">Edit</a>
-                            <a href="/">Back to list</a>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-3 pt-3 border-top">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="@($"/books/edit?id={book.Id}")" class="btn btn-modern">Edit</a>
+                            <a href="@($"/books/delete?id={book.Id}")" class="btn btn-danger">Delete</a>
+                            <a href="/" class="btn btn-outline-modern">Back to list</a>
                         </div>
                         <button class="btn btn-warning" @onclick="() => AddToCart(book)">Purchase</button>
                     </div>
