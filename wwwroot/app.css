@@ -313,16 +313,6 @@ h1:focus {
     box-shadow: 0 14px 22px rgba(16, 34, 59, 0.14);
 }
 
-.cart-trigger.is-empty {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.cart-trigger.is-empty:hover {
-    transform: none;
-    box-shadow: 0 10px 18px rgba(16, 34, 59, 0.08);
-}
-
 .cart-item {
     border-radius: 16px;
     border: 1px solid var(--border);

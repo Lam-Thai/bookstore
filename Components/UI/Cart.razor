@@ -2,8 +2,7 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<span role="button" class="position-relative fs-4 fw-bold cart-trigger @(OrderItems.Any() ? string.Empty : "is-empty")"
-    aria-disabled="@(!OrderItems.Any())"
+<span role="button" class="position-relative fs-4 fw-bold cart-trigger"
     @onclick="OpenCart">
     <i class="bi bi-cart"></i>
 
@@ -42,11 +41,6 @@
 
     private void OpenCart()
     {
-        if (!OrderItems.Any())
-        {
-            return;
-        }
-
         NavigationManager.NavigateTo("/cart");
     }
 }
