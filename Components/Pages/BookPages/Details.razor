@@ -57,11 +57,30 @@
                 </div>
             </div>
         </div>
+
+        <div class="glass-panel content-panel mt-4">
+            <h4 class="mb-3">Customers who bought this item also bought</h4>
+
+            @if (recommendations.Count == 0)
+            {
+                <p class="mb-0 text-body-secondary">No recommendations yet for this book.</p>
+            }
+            else
+            {
+                <div class="book-grid">
+                    @foreach (var recommendedBook in recommendations)
+                    {
+                        <BookCard Book="@recommendedBook" />
+                    }
+                </div>
+            }
+        </div>
     }
 </section>
 
 @code {
     private Book? book;
+    private List<Book> recommendations = [];
 
     [SupplyParameterFromQuery]
     private int Id { get; set; }
@@ -74,7 +93,40 @@
         if (book is null)
         {
             NavigationManager.NotFound();
+            return;
         }
+
+        var coPurchasedBookScores = await context.Orders
+            .AsNoTracking()
+            .Where(o => !o.IsCanceled)
+            .Where(o => o.OrderItems.Any(item => item.BookId == Id))
+            .SelectMany(o => o.OrderItems)
+            .Where(item => item.BookId != Id)
+            .GroupBy(item => item.BookId)
+            .Select(group => new
+            {
+                BookId = group.Key,
+                Score = group.Sum(item => item.Quantity)
+            })
+            .OrderByDescending(item => item.Score)
+            .ThenBy(item => item.BookId)
+            .Take(6)
+            .ToListAsync();
+
+        if (coPurchasedBookScores.Count == 0)
+        {
+            return;
+        }
+
+        var recommendedBooks = await context.Books
+            .AsNoTracking()
+            .Where(book => coPurchasedBookScores.Select(score => score.BookId).Contains(book.Id))
+            .ToDictionaryAsync(book => book.Id);
+
+        recommendations = coPurchasedBookScores
+            .Where(score => recommendedBooks.ContainsKey(score.BookId))
+            .Select(score => recommendedBooks[score.BookId])
+            .ToList();
     }
 
     private void AddToCart(Book book)
