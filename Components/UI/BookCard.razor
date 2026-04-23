@@ -1,18 +1,19 @@
-<div class="card overflow-hidden text-white book-card">
-    <img src="@Book.CoverImageUrl" alt="@Book.Title" />
-    <a href="/books/details?id=@Book.Id" class="stretched-link"></a>
-    <div class="card-img-overlay d-flex flex-column p-0 book-card-overlay">
-        <div class="px-3 py-2 grow book-card-top">
-            <h5 class="card-title book-card-title">@Book.Title</h5>
-            <h6 class="card-subtitle book-card-subtitle">@Book.Author</h6>
-        </div>
-        <div class="card-footer mt-auto text-center book-card-footer">
-            <span class="fw-bold text-white fs-4">
-                $@Book.Price
-            </span>
+<a href="/books/details?id=@Book.Id" class="book-card-link" aria-label="View details for @Book.Title">
+    <div class="card overflow-hidden text-white book-card">
+        <img src="@Book.CoverImageUrl" alt="@Book.Title" />
+        <div class="card-img-overlay d-flex flex-column p-0 book-card-overlay">
+            <div class="px-3 py-2 grow book-card-top">
+                <h5 class="card-title book-card-title">@Book.Title</h5>
+                <h6 class="card-subtitle book-card-subtitle">@Book.Author</h6>
+            </div>
+            <div class="card-footer mt-auto text-center book-card-footer">
+                <span class="fw-bold text-white fs-4">
+                    $@Book.Price
+                </span>
+            </div>
         </div>
     </div>
-</div>
+</a>
 
 @code {
     [Parameter] public Book Book { get; set; }

@@ -185,6 +185,19 @@ h1:focus {
     gap: 1.2rem;
 }
 
+.book-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.book-card-link:visited,
+.book-card-link:hover,
+.book-card-link:active {
+    color: inherit;
+    text-decoration: none;
+}
+
 .book-card {
     position: relative;
     overflow: hidden;
