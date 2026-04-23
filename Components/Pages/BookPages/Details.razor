@@ -1,4 +1,5 @@
 @page "/books/details"
+@page "/books/details/{RouteId:int}"
 @using Microsoft.EntityFrameworkCore
 @using Bookstore.Models
 @inject IDbContextFactory<Bookstore.Data.BookstoreDb> DbFactory
@@ -82,15 +83,25 @@
     private Book? book;
     private List<Book> recommendations = [];
 
-    [SupplyParameterFromQuery]
-    private int Id { get; set; }
+    [Parameter]
+    public int? RouteId { get; set; }
+
+    [SupplyParameterFromQuery(Name = "id")]
+    private int? QueryId { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
         recommendations = [];
+        var selectedBookId = RouteId ?? QueryId;
+
+        if (!selectedBookId.HasValue)
+        {
+            NavigationManager.NotFound();
+            return;
+        }
 
         using var context = DbFactory.CreateDbContext();
-        book = await context.Books.FirstOrDefaultAsync(m => m.Id == Id);
+        book = await context.Books.FirstOrDefaultAsync(m => m.Id == selectedBookId.Value);
 
         if (book is null)
         {
@@ -101,9 +112,9 @@
         var coPurchasedBookScores = await context.Orders
             .AsNoTracking()
             .Where(o => !o.IsCanceled)
-            .Where(o => o.OrderItems.Any(item => item.BookId == Id))
+            .Where(o => o.OrderItems.Any(item => item.BookId == selectedBookId.Value))
             .SelectMany(o => o.OrderItems)
-            .Where(item => item.BookId != Id)
+            .Where(item => item.BookId != selectedBookId.Value)
             .GroupBy(item => item.BookId)
             .Select(group => new
             {
